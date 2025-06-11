@@ -6,7 +6,7 @@ block content
 
     //Dummy users array for sorting alphabetical order
     -
-        const posts = [
+        const users = [
             {
                 avatar: "/img/users/santa.png",
                 name: "santa",
@@ -35,7 +35,7 @@ block content
         ];
 
         //Sort posts in place by username
-        posts.sort((a,b) => a.name.localeCompare(b.name, 'de'));
+        users.sort((a,b) => a.name.localeCompare(b.name, 'de'));
 
 
 
@@ -44,7 +44,7 @@ block content
 
         //Loop through each user
         ul.list-group
-            each user in posts
+            each user in users
                 //Frame for each user
                 li.list-group-item
                     .d-flex.align-items-center
