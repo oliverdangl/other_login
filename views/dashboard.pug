@@ -1,16 +1,79 @@
 extends layout
 
 block content
+    //Dummy posts array (JS block)
+    -
+        //Marked unused because JS and later used in pug
+        const posts = [
+            {
+                avatar: "/img/users/santa.png",
+                name: "santa",
+                handle: "santa",
+                date: "28.11.2022",
+                time: "12:49",
+                text: "Looking forward to Christmas! #hohoho"
+            },
+            {
+                avatar: "/img/users/aaronhollack.png",
+                name: "aaron",
+                handle: "aaron",
+                date: "27.11.2022",
+                time: "12:27",
+                text: "Hallo Welt :) #mi and happy #christmas to all!"
+            },
+            {
+                avatar: "/img/users/panickyDingo2.png",
+                name: "panickyDingo2",
+                handle: "panickyDingo2",
+                date: "27.11.2022",
+                time: "18:05",
+                text: "Hallo #mi, happy #christmas!"
+            },
+            {
+                avatar: "/img/users/thrilledWeaver3.png",
+                name: "thrilledWeaver3",
+                handle: "thrilledWeaver3",
+                date: "27.11.2022",
+                time: "12:23",
+                text: "Hello #world!"
+            },
+            {
+                avatar: "/img/users/bruceferguson.png",
+                name: "bruceferguson",
+                handle: "bruceferguson",
+                date: "27.11.2022",
+                time: "11:23",
+                text: "Hallo Welt #oth #mi #other"
+            },
+        ];
+
     //Margin top with 1.5 spacer
     .mt-4
+        h5.mb-4 Startseite
 
         //Iterating over the dummy post array
-        each post in [{user: "Alice", text: "Schaut her mein erster Other :D"}, {user: "Bob", text: "Hey google wo wachsen Bananen? LG Bob"}]
+        each post in posts
             //Card using margin bottom with default spacer * 1
             .card.mb-3
                 //Content of the card
                 .card-body
-                    //Renders post.user in h5 class card-title
-                    h5.card-title= post.user
-                    //Renders post.text in paragraph class card-text
-                    p.card-text= post.text
+                    //Flex container to order image and text next to each other
+                    .d-flex
+                        img.rounded-circle.me-3(
+                            src=post.avatar,
+                            alt=post.name,
+                            width="48",
+                            height="48"
+                        )
+                        //Fill remaining space in container
+                        .flex-fill
+                            .d-flex.justify-content-between.align-items-center.mb-1
+                                span
+                                    //Thick name
+                                    strong= post.name
+                                    //Light grey @ text
+                                    span.text-muted.ms-1 @#{post.handle}
+                                //Display date and time together
+                                small.text-muted= `${post.date} um ${post.time}`
+                            //Actual post content
+                            p.mb-0= post.text

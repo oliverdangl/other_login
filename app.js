@@ -10,6 +10,12 @@ app = express();
 //turn on serving static files (required for delivering css to client)
 app.use(express.static("public"));
 
+//Storing requested path
+app.use((req,res,next) => {
+    res.locals.currentPath = req.path;
+    next();
+})
+
 //configure template engine
 app.set("views", "views");
 app.set("view engine", "pug");
