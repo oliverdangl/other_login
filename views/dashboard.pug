@@ -48,30 +48,32 @@ block content
         ];
 
     //Margin top with 1.5 spacer
-    .post-wrapper
-        h5.post-list-heading Startseite
+    .mt-4
+        h5.mb-4 Startseite
 
         //Iterating over the dummy post array
         each post in posts
             //Card using margin bottom with default spacer * 1
-            .post-card
+            .card.mb-3
                 //Content of the card
-                .post-content
-                    img.post-avatar(
-                        src= post.avatar,
-                        alt= post.name,
-                        width="48",
-                        height="48"
-                    )
-                    //Fill remaining space in container
-                    .post-body
-                        .post-header
-                            .post-user
-                                //Thick name
-                                strong.post-name= post.name
-                                //Light grey @ text
-                                span.post-handle=  `@#{post.handle}`
-                            //Display date and time together
-                            small.post-timestamp= `${post.date} um ${post.time}`
-                        //Actual post content
-                        p.post-text= post.text
+                .card-body
+                    //Flex container to order image and text next to each other
+                    .d-flex
+                        img.rounded-circle.me-3(
+                            src=post.avatar,
+                            alt=post.name,
+                            width="48",
+                            height="48"
+                        )
+                        //Fill remaining space in container
+                        .flex-fill
+                            .d-flex.justify-content-between.align-items-center.mb-1
+                                span
+                                    //Thick name
+                                    strong= post.name
+                                    //Light grey @ text
+                                    span.text-muted.ms-1 @#{post.handle}
+                                //Display date and time together
+                                small.text-muted= `${post.date} um ${post.time}`
+                            //Actual post content
+                            p.mb-0= post.text
