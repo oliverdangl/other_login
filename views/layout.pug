@@ -24,54 +24,49 @@ html
 
     body
         //Container taking full width
-        .container-fluid
+        .layout-container
             //Row in bootstrap-grid holding the 3 main columns
-            .row
+            .layout-row
                 //Left column of navigation (25% of site) including 2 links for dashboard and users
-                .col-3.bg-light.min-vh-100
+                .sidebar-left
                     //Other logo with padding to start
-                    .d-flex.justify-content-start.ps-3.pt-4
+                    .logo-wrapper
                         a(href="/dashboard")
                             //Style="height: 2em; width: auto;" instead css possible
-                            img.logo(
-                                src="/img/logo.svg"
+                            img(src="/img/logo.svg"
                                 alt="OTHer Logo"
+                                class="logo"
+                            )
 
-                            )
-                    .mt-3
-                        //navigation bar including clickable links
-                        nav.nav.flex-column.ms-3
-                            a.nav-link.text-dark.d-flex.align-items-center(
-                                href="/dashboard"
-                                class= currentPath === "/dashboard" ? "text-dark fw-bold": "text-dark"
-                            )
-                                //House icon
-                                i.bi.bi-house-door-fill.me-2
-                                span Startseite
-                            a.nav-link.text-dark.d-flex.align-items-center(
-                                href="/users",
-                                class= currentPath === "/users" ? "text-dark fw-bold": "text-dark"
+                    nav.navigation
+                        a(href="/dashboard"
+                            class= currentPath === "/dashboard" ? "nav-link active": "nav-link")
 
-                            )
-                                //People icon
-                                i.bi.bi-people-fill.me-2
-                                span Nutzer
+                            //House icon
+                            i(class="bi bi-house-door-fill icon")
+                            span Startseite
+                        a(href="/users"
+                            class= currentPath === "/users" ? "nav-link active": "nav-link")
+
+                            //People icon
+                            i(class="bi bi-people-fill icon")
+                            span Nutzer
 
                 //Middle column taking 50% of site with place holder of child elements
-                .col-6
+                .main-content
                     block content
 
                 //Right column (25% width) containing searchbar
-                .col-3.bg-light.min-vh-100
+                .sidebar-right
                     //Padding around 1rem
-                    .p-3
+                    .search-wrapper
                         //Input group for icon + input
-                        .input-group
+                        .search-group
                             //Search icon (magnifying lens)
-                            span.input-group-text.bg-white.border-end-0.rounded-start
-                                i.bi.bi-search
+                            span.search-icon
+                                i(class="bi bi-search")
                             //Searchbar input field
-                            input.form-control.rounded-end(
-                                type="text",
-                                placeholder="Other suchen...",
-                            )
+                            input(type="text"
+                                  placeholder="Other suchen..."
+                                  class="search-input"
+                                  )

@@ -3,7 +3,6 @@ extends layout
 
 
 block content
-
     //Dummy users array for sorting alphabetical order
     -
         const users = [
@@ -39,23 +38,21 @@ block content
 
 
 
-    .mt-4
-        h5.mb-4 Registrierte Nutzer
+    .users-wrapper
+        h5.user-list-heading Registrierte Nutzer
 
         //Loop through each user
-        ul.list-group
+        ul.user-list
             each user in users
                 //Frame for each user
-                li.list-group-item
-                    .d-flex.align-items-center
-                        img.rounded-circle.me-3(
+                li.user-list-item
+                    .user-entry
+                        img.user-avatar(
                             src=user.avatar,
                             alt=user.name,
                             width="48",
                             height="48"
                         )
-                        span
-                            strong= user.name
-                            //Render "@handle"
-                            span
-                                =`@${user.handle}`
+                        .user-info
+                            strong.user-name= user.name
+                            span.user-handle= `@${user.handle}`
