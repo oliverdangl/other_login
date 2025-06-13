@@ -4,7 +4,7 @@ extends layout
 
 block content
 
-    //Dummy users array for sorting alphabetical order
+    //-Dummy users array for sorting alphabetical order
     -
         const users = [
             {
@@ -31,31 +31,31 @@ block content
                 avatar: "/img/users/bruceferguson.png",
                 name: "bruceferguson",
                 handle: "bruceferguson"
-            },
+            }
         ];
 
-        //Sort posts in place by username
+        //-Sort posts in place by username
         users.sort((a,b) => a.name.localeCompare(b.name, 'de'));
 
 
 
-    .mt-4
-        h5.mb-4 Registrierte Nutzer
+    div(class= "mt-4")
+        h5(class= "mb-4") Registrierte Nutzer
 
-        //Loop through each user
-        ul.list-group
+        //-Loop through each user
+        ul(class= "list-group")
             each user in users
-                //Frame for each user
-                li.list-group-item
-                    .d-flex.align-items-center
-                        img.rounded-circle.me-3(
-                            src=user.avatar,
-                            alt=user.name,
-                            width="48",
-                            height="48"
+                //-Frame for each user
+                li(class= "list-group-item")
+                    div(class= "d-flex align-items-center")
+                        img(
+                            class= "rounded-circle me-3",
+                            src= user.avatar,
+                            alt= user.name,
+                            width= "48",
+                            height= "48"
                         )
                         span
                             strong= user.name
-                            //Render "@handle"
-                            span
-                                =`@${user.handle}`
+                            //-Render "@handle"
+                            span= `@${user.handle}`

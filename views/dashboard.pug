@@ -1,9 +1,9 @@
 extends layout
 
 block content
-    //Dummy posts array (JS block)
+    //-Dummy posts array (JS block)
     -
-        //Marked unused because JS and later used in pug
+        //-Marked unused because JS and later used in pug
         const posts = [
             {
                 avatar: "/img/users/santa.png",
@@ -44,36 +44,37 @@ block content
                 date: "27.11.2022",
                 time: "11:23",
                 text: "Hallo Welt #oth #mi #other"
-            },
+            }
         ];
 
-    //Margin top with 1.5 spacer
-    .mt-4
-        h5.mb-4 Startseite
+    //-Margin top with 1.5 spacer
+    div(class= "mt-4")
+        h5(class= "mb-4") Startseite
 
-        //Iterating over the dummy post array
+        //-Iterating over the dummy post array
         each post in posts
-            //Card using margin bottom with default spacer * 1
-            .card.mb-3
-                //Content of the card
-                .card-body
-                    //Flex container to order image and text next to each other
-                    .d-flex
-                        img.rounded-circle.me-3(
-                            src=post.avatar,
-                            alt=post.name,
-                            width="48",
-                            height="48"
+            //-Card using margin bottom with default spacer * 1
+            div(class= "card mb-3")
+                //-Content of the card
+                div(class= "card-body")
+                    //-Flex container to order image and text next to each other
+                    div(class= "d-flex")
+                        img(
+                            class= "rounded-circle me-3",
+                            src= post.avatar,
+                            alt= post.name,
+                            width= "48",
+                            height= "48"
                         )
-                        //Fill remaining space in container
-                        .flex-fill
-                            .d-flex.justify-content-between.align-items-center.mb-1
+                        //-Fill remaining space in container
+                        div(class= "flex-fill")
+                            div(class= "d-flex justify-content-between align-items-center mb-1")
                                 span
-                                    //Thick name
+                                    //-Thick name
                                     strong= post.name
-                                    //Light grey @ text
-                                    span.text-muted.ms-1 @#{post.handle}
-                                //Display date and time together
-                                small.text-muted= `${post.date} um ${post.time}`
-                            //Actual post content
-                            p.mb-0= post.text
+                                    //-Light grey @ text
+                                    span(class= "text-muted ms-1")= `@${post.handle}`
+                                //-Display date and time together
+                                small(class= "text-muted")= `${post.date} um ${post.time}`
+                            //-Actual post content
+                            p(class= "mb-0")= post.text
