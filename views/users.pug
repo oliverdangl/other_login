@@ -4,41 +4,6 @@ extends layout
 
 block content
 
-    //-Dummy users array for sorting alphabetical order
-    -
-        const users = [
-            {
-                avatar: "/img/users/santa.png",
-                name: "santa",
-                handle: "santa"
-            },
-            {
-                avatar: "/img/users/aaronhollack.png",
-                name: "aaron",
-                handle: "aaron"
-            },
-            {
-                avatar: "/img/users/panickyDingo2.png",
-                name: "panickyDingo2",
-                handle: "panickyDingo2"
-            },
-            {
-                avatar: "/img/users/thrilledWeaver3.png",
-                name: "thrilledWeaver3",
-                handle: "thrilledWeaver3"
-            },
-            {
-                avatar: "/img/users/bruceferguson.png",
-                name: "bruceferguson",
-                handle: "bruceferguson"
-            }
-        ];
-
-        //-Sort posts in place by username
-        users.sort((a,b) => a.name.localeCompare(b.name, 'de'));
-
-
-
     div(class= "mt-4")
         h5(class= "mb-4") Registrierte Nutzer
 
@@ -50,7 +15,7 @@ block content
                     div(class= "d-flex align-items-center")
                         img(
                             class= "rounded-circle me-3",
-                            src= user.avatar,
+                            src= user.profile_pic,
                             alt= user.name,
                             width= "48",
                             height= "48"
@@ -58,4 +23,4 @@ block content
                         span
                             strong= user.name
                             //-Render "@handle"
-                            span= `@${user.handle}`
+                            span(class= "text-muted ms-1")= `@${user.name}`

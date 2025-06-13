@@ -1,58 +1,13 @@
 extends layout
 
 block content
-    //-Dummy posts array (JS block)
-    -
-        //-Marked unused because JS and later used in pug
-        const posts = [
-            {
-                avatar: "/img/users/santa.png",
-                name: "santa",
-                handle: "santa",
-                date: "28.11.2022",
-                time: "12:49",
-                text: "Looking forward to Christmas! #hohoho"
-            },
-            {
-                avatar: "/img/users/aaronhollack.png",
-                name: "aaron",
-                handle: "aaron",
-                date: "27.11.2022",
-                time: "12:27",
-                text: "Hallo Welt :) #mi and happy #christmas to all!"
-            },
-            {
-                avatar: "/img/users/panickyDingo2.png",
-                name: "panickyDingo2",
-                handle: "panickyDingo2",
-                date: "27.11.2022",
-                time: "18:05",
-                text: "Hallo #mi, happy #christmas!"
-            },
-            {
-                avatar: "/img/users/thrilledWeaver3.png",
-                name: "thrilledWeaver3",
-                handle: "thrilledWeaver3",
-                date: "27.11.2022",
-                time: "12:23",
-                text: "Hello #world!"
-            },
-            {
-                avatar: "/img/users/bruceferguson.png",
-                name: "bruceferguson",
-                handle: "bruceferguson",
-                date: "27.11.2022",
-                time: "11:23",
-                text: "Hallo Welt #oth #mi #other"
-            }
-        ];
 
     //-Margin top with 1.5 spacer
     div(class= "mt-4")
         h5(class= "mb-4") Startseite
 
         //-Iterating over the dummy post array
-        each post in posts
+        each post in others
             //-Card using margin bottom with default spacer * 1
             div(class= "card mb-3")
                 //-Content of the card
@@ -73,8 +28,8 @@ block content
                                     //-Thick name
                                     strong= post.name
                                     //-Light grey @ text
-                                    span(class= "text-muted ms-1")= `@${post.handle}`
+                                    span(class= "text-muted ms-1")= `@${post.name}`
                                 //-Display date and time together
-                                small(class= "text-muted")= `${post.date} um ${post.time}`
+                                small(class= "text-muted")= new Date(post.created).toLocaleString("de-DE")
                             //-Actual post content
                             p(class= "mb-0")= post.text
