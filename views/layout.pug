@@ -26,59 +26,14 @@ html
             div(class= "row")
                 //-Left column of navigation (25% of site) including 2 links for dashboard and users
                 div(class= "col-3 bg-light min-vh-100")
-                    //-Other logo with padding to start
-                    div(class= "d-flex justify-content-start ps-3 pt-4")
-                        a(href= "/dashboard")
-                            img(
-                                class= "img-fluid",
-                                src= "/img/logo.svg",
-                                alt= "OTHer Logo",
-                                height= "auto",
-                                width= "32"
-                            )
-                    div(class= "mt-3")
-                        //-Navigation bar including clickable links
-                        nav(class= "nav flex-column ms-3")
-                            //-Link to dashboard thick when /dashboard
-                            a(
-                                href= "/dashboard",
-                                class= (currentPath === "/dashboard"
-                                        ? "nav-link text-dark fw-bold d-flex align-items-center"
-                                        : "nav-link text-dark d-flex align-items-center"
-                                )
-                            )
-                                //-House icon
-                                i(class= "bi bi-house-door-fill me-2")
-                                span Startseite
-                            //-Link to users thick when /users
-                            a(
-                                href="/users",
-                                class= (currentPath === "/users"
-                                        ? "nav-link text-dark fw-bold d-flex align-items-center"
-                                        : "nav-link text-dark d-flex align-items-center"
-                                )
-                            )
-                                //-People icon
-                                i(class= "bi bi-people-fill me-2")
-                                span Nutzer
+                    block left
+
 
                 //-Middle column taking 50% of site with place holder of child elements
                 div(class= "col-6")
                     block content
 
+
                 //-Right column (25% width) containing searchbar
                 div(class= "col-3 bg-light min-vh-100")
-                    //-Padding around 1rem
-                    div(class= "p-3")
-                        //-Input group for icon + input
-                        div(class= "input-group")
-                            //-Search icon (magnifying lens)
-                            span(class= "input-group-text bg-white border-end-0 rounded-start")
-                                i(class= "bi bi-search")
-                            //-Searchbar input field
-                            input(
-                                class= "form-control rounded-end",
-                                type= "text",
-                                placeholder= "Other suchen...",
-                                aria-label= "Search"
-                            )
+                    block right

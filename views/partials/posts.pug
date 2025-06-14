@@ -1,0 +1,26 @@
+each post in others
+    //-Card using margin bottom with default spacer * 1
+    div(class= "card mb-3")
+        //-Content of the card
+        div(class= "card-body")
+            //-Flex container to order image and text next to each other
+            div(class= "d-flex")
+                img(
+                    class= "rounded-circle me-3",
+                    src= "img/users/" + post.profile_pic + ".png",
+                    alt= post.name,
+                    width= "48",
+                    height= "48"
+                )
+                //-Fill remaining space in container
+                div(class= "flex-fill")
+                    div(class= "d-flex justify-content-between align-items-center mb-1")
+                        span
+                            //-Thick name
+                            strong= post.name
+                            //-Light grey @ text
+                            span(class= "text-muted ms-1")= `@${post.name}`
+                        //-Display date and time together
+                        small(class= "text-muted")= new Date(post.created).toLocaleString("de-DE")
+                    //-Actual post content
+                    p(class= "mb-0")= post.text

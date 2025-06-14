@@ -46,7 +46,17 @@ app.set("view engine", "pug");
 
 //Redirect root URL to /dashboard
 app.get('/', (req, res) => {
-    res.redirect("/dashboard");
+    dbClient
+        .query(`
+            SELECT o.post_id, o.text, o.created, 
+                    u.user_id, u.name, u.profile_pic
+            FROM others o
+            JOIN users u ON o.user_id = u.user_id
+            ORDER BY o.created DESC
+        `)
+        .then(({ rows: others }) => {
+                res.render("landing", { others });
+            });
 });
 
 

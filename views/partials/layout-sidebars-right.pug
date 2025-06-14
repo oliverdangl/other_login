@@ -1,0 +1,14 @@
+//-Padding around 1rem
+div(class= "p-3")
+    //-Input group for icon + input
+    div(class= "input-group")
+        //-Search icon (magnifying lens)
+        span(class= "input-group-text bg-white border-end-0 rounded-start")
+            i(class= "bi bi-search")
+        //-Searchbar input field
+        input(
+            class= "form-control rounded-end",
+            type= "text",
+            placeholder= "Other suchen...",
+            aria-label= "Search"
+        )

@@ -1,26 +1,18 @@
 extends layout
 
 
+block left
+    include partials/layout-sidebars-left
 
 block content
-
+    //-Margin top with 1.5 spacer
     div(class= "mt-4")
         h5(class= "mb-4") Registrierte Nutzer
 
         //-Loop through each user
         ul(class= "list-group")
-            each user in users
-                //-Frame for each user
-                li(class= "list-group-item")
-                    div(class= "d-flex align-items-center")
-                        img(
-                            class= "rounded-circle me-3",
-                            src= "img/users/" + user.profile_pic + ".png",
-                            alt= user.name,
-                            width= "48",
-                            height= "48"
-                        )
-                        span
-                            strong= user.name
-                            //-Render "@handle"
-                            span(class= "text-muted ms-1")= `@${user.name}`
+            include partials/userlist
+
+
+block right
+    include partials/layout-sidebars-right

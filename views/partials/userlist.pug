@@ -1,0 +1,15 @@
+each user in users
+    //-Frame for each user
+    li(class= "list-group-item")
+        div(class= "d-flex align-items-center")
+            img(
+                class= "rounded-circle me-3",
+                src= "img/users/" + user.profile_pic + ".png",
+                alt= user.name,
+                width= "48",
+                height= "48"
+            )
+            span
+                strong= user.name
+                //-Render "@handle"
+                span(class= "text-muted ms-1")= `@${user.name}`
