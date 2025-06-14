@@ -1,0 +1,43 @@
+extends layout
+
+block left
+    include partials/sidebar-left-landing
+
+
+block content
+    div(class= "mt-5")
+        h2 Registrieren
+        form(
+            action= "/register",
+            method= "post",
+            )
+            div(class= "mb-3")
+                label(for= "username") Nutzername
+                input(
+                class= "form-control",
+                type= "text",
+                name= "username",
+                id= "username",
+                placeholder= "Nutzername"
+                )
+            div(class= "mb-3")
+                label(for= "birthdate") Geburtsdatum
+                input(
+                class= "form-control",
+                type= "date",
+                name= "birthdate",
+                id= "birthdate",
+                )
+            div(class= "mb-3")
+                label(for= "password") Passwort
+                input(
+                class= "form-control",
+                type= "password",
+                name= "password",
+                id= "password",
+                placeholder= "Passwort"
+                )
+            button(
+                class= "btn btn-primary",
+                type= "submit"
+            ) Registrieren

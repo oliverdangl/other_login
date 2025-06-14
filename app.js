@@ -94,6 +94,14 @@ app.get("/users", (req, res) => {
         })
 })
 
+app.get("/register", (req, res) => {
+    res.render("register");
+})
+
+app.get("/login", (req, res) => {
+    res.render("login");
+})
+
 
 //Error handling
 app.use((err, req, res) =>{
