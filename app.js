@@ -45,7 +45,7 @@ app.set("views", "views");
 app.set("view engine", "pug");
 
 //Redirect root URL to /dashboard
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
     dbClient
         .query(`
             SELECT o.post_id, o.text, o.created, 
@@ -100,6 +100,10 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
     res.render("login");
+})
+
+app.get("/profile", (req, res) => {
+    res.render("profile");
 })
 
 
