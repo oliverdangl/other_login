@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 //Get "others" posts with posts joined with users
 // => o.user_id as primary key and u.user_id as foreign key
 //After that render dashboard
-app.get("/dashboard", (req, res,next) => {
+app.get("/dashboard", (req, res) => {
     dbClient
         .query(`
             SELECT o.post_id, o.text, o.created,
@@ -66,14 +66,13 @@ app.get("/dashboard", (req, res,next) => {
         .then(({ rows: others }) => {
             res.render("dashboard", {others})
         })
-        .catch(next);
 });
 
 
 //Route: /users
 //Get all users (id, name, picture) sorted by name alphabetically
 //After that render users
-app.get("/users", (req, res,next) => {
+app.get("/users", (req, res) => {
     dbClient
         .query(`
             SELECT user_id, name, profile_pic
@@ -83,12 +82,11 @@ app.get("/users", (req, res,next) => {
         .then (({rows: users }) => {
              res.render("users", {users});
         })
-        .catch(next);
 })
 
 
 //Error handling
-app.use((err, req, res, next) =>{
+app.use((err, req, res) =>{
     console.log(err);
     res.status(500).send("Server Error");
 });
