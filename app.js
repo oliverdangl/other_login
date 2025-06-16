@@ -108,6 +108,19 @@ app.get("/register", (req, res) => {
     res.render("register");
 })
 
+app.post("/register", (req, res) => {
+    const { name, birthday, password } = req.body;
+    dbClient
+        .query(`INSERT INTO users (name, password, birthday, created)
+                VALUES ($1, $2, $3, NOW())`,
+        [name, password, birthday || null ]
+        )
+        .then(dbResponse => {
+            res.redirect("/registered-site");
+        })
+        .catch(next);
+});
+
 app.get("/registered-site", (req, res) => {
     res.render("registered-site");
 })
