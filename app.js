@@ -45,7 +45,7 @@ app.set("views", "views");
 app.set("view engine", "pug");
 
 //Redirect root URL to /dashboard
-app.get("/", (req, res) => {
+app.get("/", (req, res,next) => {
     dbClient
         .query(`
             SELECT o.post_id, o.text, o.created, 
@@ -54,17 +54,22 @@ app.get("/", (req, res) => {
             JOIN users u ON o.user_id = u.user_id
             ORDER BY o.created DESC
         `)
-        .then(({ rows: others }) => {
-                res.render("landing", { others });
-            });
+        //When query succeeds => call of landing page with key others including other array
+        .then(dbResponse => {
+            res.render("landing", {others: dbResponse.rows});
+        })
+        .catch(next); //Triggers middleware error-handling
 });
+
+
+
 
 
 //Route: /dashboard
 //Get "others" posts with posts joined with users
 // => o.user_id as primary key and u.user_id as foreign key
 //After that render dashboard
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", (req, res, next) => {
     dbClient
         .query(`
             SELECT o.post_id, o.text, o.created,
@@ -73,29 +78,38 @@ app.get("/dashboard", (req, res) => {
             JOIN users u ON o.user_id = u.user_id
             ORDER BY o.created DESC
         `)
-        .then(({ rows: others }) => {
-            res.render("dashboard", {others})
+        //When query succeeds => call of dashboard page with others key including other array
+        .then(dbResponse => {
+            res.render("dashboard", {others: dbResponse.rows});
         })
+        .catch(next); //Triggers middleware error-handling
 });
 
 
 //Route: /users
 //Get all users (id, name, picture) sorted by name alphabetically
 //After that render users
-app.get("/users", (req, res) => {
+//"next" function to tell express if something goes wrong => appropriate error handler
+app.get("/users", (req, res, next) => {
     dbClient
         .query(`
             SELECT user_id, name, profile_pic
             FROM users
             ORDER BY name
         `)
-        .then (({rows: users }) => {
-             res.render("users", {users});
+        //When query succeeds => call of users page with users key including user array
+        .then(dbResponse => {
+            res.render("users", {users: dbResponse.rows});
         })
+        .catch(next); //Triggers middleware error-handling
 })
 
 app.get("/register", (req, res) => {
     res.render("register");
+})
+
+app.get("/registered-site", (req, res) => {
+    res.render("registered-site");
 })
 
 app.get("/login", (req, res) => {
@@ -107,11 +121,13 @@ app.get("/profile", (req, res) => {
 })
 
 
-//Error handling
-app.use((err, req, res) =>{
-    console.log(err);
+//Middleware error handling
+// ganz am Ende, nach allen Routen:
+app.use((err, req, res, next) => {
+    console.error(err);
     res.status(500).send("Server Error");
 });
+
 
 
 //Listen on the configured port
