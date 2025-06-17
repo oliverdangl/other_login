@@ -6,7 +6,35 @@ const express = require("express"); //Import express
 const pg = require("pg"); //Import PostgreSQL client library
 const bodyParser = require("body-parser"); //Import body-parser
 
+const session = require("express-session");
+const {urlencoded} = require("express");
+
 const app = express();
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 3600000 }
+}));
+
+//Parse URL-encoded bodies
+app.use(urlencoded({ extended: false }));
+//Serve files from "public"
+app.use(express.static("public"));
+
+
+//Store current request path in res.locals for template
+app.use((req,res,next) => {
+    res.locals.currentPath = req.path;
+    res.locals.loggedIn = req.session.userId;
+    res.locals.username = req.session.username;
+    next();
+});
+
+//Tell Express where to find view template and that pug is used
+app.set("views", "views");
+app.set("view engine", "pug");
 
 
 //Read port number and database connection
@@ -26,25 +54,19 @@ dbClient
     .catch(err => {
         console.error("DB-Verbindungsfehler:", err);
         process.exit(1);
-    });
+});
 
 
-//Serve files from "public"
-app.use(express.static("public"));
-//Parse URL-encoded bodies
-app.use(bodyParser.urlencoded({ extended: false }));
-
-//Store current request path in res.locals for template
-app.use((req,res,next) => {
-    res.locals.currentPath = req.path;
+function requireLogin(req, res, next) {
+    if(!req.session.userId){
+        return res.render("error", { error: "Du musst eingeloggt sein, um auf diese Seite zuzugreifen"});
+    }
     next();
-})
+}
 
-//Tell Express where to find view template and that pug is used
-app.set("views", "views");
-app.set("view engine", "pug");
+//Routes
 
-//Redirect root URL to /dashboard
+//Landing page
 app.get("/", (req, res,next) => {
     dbClient
         .query(`
@@ -62,14 +84,8 @@ app.get("/", (req, res,next) => {
 });
 
 
-
-
-
-//Route: /dashboard
-//Get "others" posts with posts joined with users
-// => o.user_id as primary key and u.user_id as foreign key
-//After that render dashboard
-app.get("/dashboard", (req, res, next) => {
+//Dashboard - protected
+app.get("/dashboard", requireLogin,  (req, res, next) => {
     dbClient
         .query(`
             SELECT o.post_id, o.text, o.created,
@@ -86,11 +102,8 @@ app.get("/dashboard", (req, res, next) => {
 });
 
 
-//Route: /users
-//Get all users (id, name, picture) sorted by name alphabetically
-//After that render users
-//"next" function to tell express if something goes wrong => appropriate error handler
-app.get("/users", (req, res, next) => {
+//Users list - protected
+app.get("/users", requireLogin, (req, res, next) => {
     dbClient
         .query(`
             SELECT user_id, name, profile_pic
@@ -104,18 +117,26 @@ app.get("/users", (req, res, next) => {
         .catch(next); //Triggers middleware error-handling
 })
 
+
+//Registration page
 app.get("/register", (req, res) => {
     res.render("register");
 })
 
-app.post("/register", (req, res) => {
+
+//Handle registration and auto-login
+app.post("/register", (req, res, next) => {
     const { name, birthday, password } = req.body;
     dbClient
         .query(`INSERT INTO users (name, password, birthday, created)
-                VALUES ($1, $2, $3, NOW())`,
+                VALUES ($1, $2, $3, NOW())
+                RETURNING user_id, name`,
         [name, password, birthday || null ]
         )
-        .then(dbResponse => {
+        .then(result => {
+            const user = result.rows[0];
+            req.session.userId = user.user_id;
+            req.session.username = user.name;
             res.redirect("/registered-site");
         })
         .catch(next);
@@ -125,17 +146,60 @@ app.get("/registered-site", (req, res) => {
     res.render("registered-site");
 })
 
+
+//Login page
 app.get("/login", (req, res) => {
     res.render("login");
 })
 
-app.get("/profile", (req, res) => {
-    res.render("profile");
-})
+app.post("/login", (req, res, next) => {
+    const { name, password } = req.body;
+    console.log("Login-Versuch mit:", { name, password });
+    dbClient
+        .query(`SELECT user_id, name
+                FROM users
+                WHERE name = $1 AND password = $2`,
+                [name, password]
+        )
+        .then(result => {
+            if(result.rows.length > 0){
+                const user = result.rows[0];
+                req.session.userId = users.user_id;
+                req.session.username = user.name;
+                res.redirect("/dashboard");
+            } else {
+                res.redirect("/login?error=1");
+            }
+        })
+        .catch(next);
+});
 
 
-//Middleware error handling
-// ganz am Ende, nach allen Routen:
+//Logout
+app.get("/logout", (req, res) => {
+    req.session.destroy(err =>{
+        if(err) console.error(err);
+        res.clearCookie("connect.sid");
+        res.redirect("/login");
+    });
+});
+
+
+//Profile page - protected
+app.get("/profile", requireLogin ,(req, res, next) => {
+    dbClient
+        .query(`SELECT user_id, name, profile_pic, birthday, created
+            FROM users WHERE user_id = $1`,
+            [req.session.userId]
+        )
+         .then(result => {
+             res.render("profile", {user: result.rows[0]});
+         })
+        .catch(next);
+});
+
+
+//Global error handler
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).send("Server Error");
@@ -143,7 +207,7 @@ app.use((err, req, res, next) => {
 
 
 
-//Listen on the configured port
+//Start server
 app.listen(PORT, function() {
   console.log(`OTHer running and listening on port ${PORT}`);
 });
