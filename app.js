@@ -125,14 +125,22 @@ app.get("/register", (req, res) => {
 
 
 //Handle registration and auto-login
-app.post("/register", (req, res, next) => {
-    const { name, birthday, password } = req.body;
+app.post("/register",  (req, res, next) => {
+    const { username, birthday, password } = req.body;
+
     dbClient
-        .query(`INSERT INTO users (name, password, birthday, created)
-                VALUES ($1, $2, $3, NOW())
-                RETURNING user_id, name`,
-        [name, password, birthday || null ]
-        )
+        .query(`SELECT COALESCE(MAX(user_id), 0) AS max_id 
+                FROM users`)
+        .then(maxResult => {
+            const nextId = maxResult.rows[0].max_id + 1;
+
+
+            return dbClient
+                .query(`INSERT INTO users (user_id, name, password, birthday, created)
+                        VALUES ($1, $2, $3, $4, NOW()) RETURNING user_id, name`,
+                    [nextId, username, password, birthdate || null]
+                );
+        })
         .then(result => {
             const user = result.rows[0];
             req.session.userId = user.user_id;
@@ -154,7 +162,6 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res, next) => {
     const { name, password } = req.body;
-    console.log("Login-Versuch mit:", { name, password });
     dbClient
         .query(`SELECT user_id, name
                 FROM users
@@ -164,7 +171,7 @@ app.post("/login", (req, res, next) => {
         .then(result => {
             if(result.rows.length > 0){
                 const user = result.rows[0];
-                req.session.userId = users.user_id;
+                req.session.userId = user.user_id;
                 req.session.username = user.name;
                 res.redirect("/dashboard");
             } else {
@@ -180,7 +187,7 @@ app.get("/logout", (req, res) => {
     req.session.destroy(err =>{
         if(err) console.error(err);
         res.clearCookie("connect.sid");
-        res.redirect("/login");
+        res.redirect("/");
     });
 });
 
